@@ -1,0 +1,150 @@
+import 'package:flutter/material.dart';
+import 'dart:developer';
+import 'dart:io';
+
+String board = chess();
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: Page1());
+  }
+}
+
+class Page1 extends StatelessWidget {
+  const Page1({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Press here to start')),
+        body: Center(
+          child: IconButton(
+            splashRadius: 100,
+            iconSize: 200,
+            icon: const Icon(Icons.start),
+            onPressed: () {
+              // do something when the button is pressed
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (cpntext) => Chess_Borad()));
+              //debugPrint('Hi there');
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Chess_Borad extends StatelessWidget {
+  const Chess_Borad({super.key});
+  final int size = 8;
+  final Color green = const Color.fromRGBO(119, 149, 86, 100);
+  final Color listGreen = const Color.fromRGBO(235, 236, 208, 100);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Board"),
+      ),
+      body: Column(
+        children: [
+          const Spacer(),
+          buildBoard(),
+          const Spacer(),
+        ],
+      )
+    );
+  }
+
+ Color buildColor(int x, int y) {
+    if (y.isEven) x++;
+    
+    return x.isEven ? green : listGreen;
+  }
+ Column buildBoard(){
+  return Column(children: [
+        ...List.generate(
+            size,
+            (x) => Row(
+                  children: [
+                    ...List.generate(
+                        size,
+                        (y) => Container(
+                              decoration: BoxDecoration(
+                                color: buildColor(x, y),
+                              ),
+                              width: 50,
+                              height: 50,
+                              child: const Text('a'),
+                            ))
+                  ],
+                ))
+      ]);
+ }
+
+}
+
+String chess() {
+  // Define the size of the chessboard
+  final int size = 8;
+
+  // Define the chess pieces for each player
+  final String blackKing = '♚';
+  final String blackQueen = '♛';
+  final String blackRook = '♜';
+  final String blackBishop = '♝';
+  final String blackKnight = '♞';
+  final String blackPawn = '♟';
+
+  final String whiteKing = '♔';
+  final String whiteQueen = '♕';
+  final String whiteRook = '♖';
+  final String whiteBishop = '♗';
+  final String whiteKnight = '♘';
+  final String whitePawn = '♙';
+
+  // Create the chessboard as a list of lists, with alternating colors
+  final List<List<String>> chessboard = List.generate(
+      size, (i) => List.generate(size, (j) => (i + j) % 2 == 0 ? '■' : '□'));
+
+  // Add the black pieces to the board
+  chessboard[0][0] = blackRook;
+  chessboard[0][1] = blackKnight;
+  chessboard[0][2] = blackBishop;
+  chessboard[0][3] = blackQueen;
+  chessboard[0][4] = blackKing;
+  chessboard[0][5] = blackBishop;
+  chessboard[0][6] = blackKnight;
+  chessboard[0][7] = blackRook;
+
+  for (int i = 0; i < size; i++) {
+    chessboard[1][i] = blackPawn;
+  }
+
+  // Add the white pieces to the board
+  chessboard[7][0] = whiteRook;
+  chessboard[7][1] = whiteKnight;
+  chessboard[7][2] = whiteBishop;
+  chessboard[7][3] = whiteQueen;
+  chessboard[7][4] = whiteKing;
+  chessboard[7][5] = whiteBishop;
+  chessboard[7][6] = whiteKnight;
+  chessboard[7][7] = whiteRook;
+
+  for (int i = 0; i < size; i++) {
+    chessboard[6][i] = whitePawn;
+  }
+  String board = "";
+  // Print the chessboard
+  for (int i = 0; i < size; i++) {
+    for (int j = 0; j < size; j++) {
+      board = board + (chessboard[i][j] + ' ');
+    }
+    board = board + ('\n');
+  }
+  return (board);
+}
